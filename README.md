@@ -57,4 +57,4 @@ npm run dev
 ```
 
 ## Author
-Built by Rishabh Bothra — github.com/rishicodes-7
+Built by Rishi Codes — github.com/rishicodes-7
