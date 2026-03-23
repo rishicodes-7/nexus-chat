@@ -143,6 +143,11 @@ export default function ChatApp() {
     await supabase.auth.signOut();
   };
 
+  const deleteMessage = async (id) => {
+    await supabase.from("messages").delete().eq("id", id);
+    setMessages(prev => prev.filter(m => m.id !== id));
+  };
+
   const formatTime = (ts) => {
     return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
@@ -617,9 +622,21 @@ export default function ChatApp() {
                   </span>
                   <span className="msg-time">{formatTime(msg.created_at)}</span>
                 </div>
-                <div className={`msg-bubble ${isOwnMessage(msg) ? "own" : ""}`}>
-                  {msg.content}
-                </div>
+                <div className={`msg-bubble ${isOwnMessage(msg) ? "own" : ""}`} style={{ position: "relative" }}>
+  {msg.content}
+  {isOwnMessage(msg) && (
+    <button onClick={() => deleteMessage(msg.id)} style={{
+      position: "absolute", top: 6, right: 8,
+      background: "none", border: "none",
+      color: "rgba(255,68,102,0.3)", cursor: "pointer",
+      fontSize: "0.65rem", padding: "0 2px",
+      transition: "color 0.2s",
+    }}
+      onMouseEnter={e => e.target.style.color = "#ff4466"}
+      onMouseLeave={e => e.target.style.color = "rgba(255,68,102,0.3)"}
+    >✕</button>
+  )}
+</div>
               </div>
             ))}
             <div ref={bottomRef} />
